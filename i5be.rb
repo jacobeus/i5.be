@@ -1,6 +1,9 @@
-%w(rubygems sinatra dm-core dm-validations dm-aggregates dm-timestamps uri).each {|f| require f}
-set :reload => true
-DataMapper.setup(:default, YAML::load(File.open('database.yml'))[Sinatra::Application.environment])
+require "rubygems"
+require "bundler"
+Bundler.setup
+Bundler.require
+enable :inline_templates
+DataMapper.setup(:default, ENV["DATABASE_URL"] || 'postgres://localhost/i5be_d')
 class Url
   CHARS= "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" unless defined?(CHARS)
   include DataMapper::Resource
@@ -25,7 +28,7 @@ saveurl = Proc.new do
   haml :index
 end
 post('/',&saveurl)
-get(%r{/http:\/\/.+},&saveurl)
+get(%r{/http:\/\/.+}, &saveurl)
 get('/:url') { (url = Url.first(:short=>params[:url])) ? redirect(url.target) : status(404) }
 get('/')     { haml(:index) }
 __END__

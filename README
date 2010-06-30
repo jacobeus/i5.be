@@ -1,5 +1,13 @@
 == i5.be
+
 Simple URL shortener.
 
 Homepage: http://i5.be
 Twitter: http://twitter.com/i5be
+
+=== Installing
+
+1. Define the database on i5be.rb:6 (change the database adapter in the Gemfile if needed)
+2. Create a database you want
+3. Run `bundle install`
+4. Launch the Sinatra app with `rackup --server <some_server>`
